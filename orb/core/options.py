@@ -3,7 +3,7 @@
 """
 This file is part of the orb project, https://orb.03c8.net
 
-Orb - 2016/2020 - by psy (epsylon@riseup.net)
+Orb - 2016/2026 - by psy (epsylon@riseup.net)
 
 You should have received a copy of the GNU General Public License along
 with Orb; if not, write to the Free Software Foundation, Inc., 51
@@ -16,12 +16,13 @@ class OrbOptions(optparse.OptionParser):
         optparse.OptionParser.__init__(self, 
                            description='\nOrb: massive footprinting tool - by psy (https://03c8.net)',
                            prog='Orb.py',
-                           version='\nVersion: v0.3 (2020) - "Red Orb! - https://orb.03c8.net"\n')
+                           version='\nVersion: v0.4 (2026) - "Yellow Orb! - https://orb.03c8.net"\n')
         self.add_option("-v", "--verbose", action="store_true", dest="verbose", help="active verbose on requests")
         self.add_option("--check-tor", action="store_true", dest="checktor", help="check to see if Tor is used properly")
         self.add_option("--update", action="store_true", dest="update", help="check for latest stable version")
         self.add_option("--spell", action="store", dest="target", help="start complete footprinting on this target")
         self.add_option("--gui", action="store_true", dest="gui", help="run GUI (Orb Web Interface)")
+        self.add_option("--delay", action="store", dest="delay", help="set delay in seconds between requests (default: 1)")
 
         group10 = optparse.OptionGroup(self, "*Methods*",
         "These options can be used to set some footprinting interaction restrictions with target(s). You only can set one:")
@@ -34,6 +35,7 @@ class OrbOptions(optparse.OptionParser):
         group1.add_option("--se", action="store", dest="engine", help="set search engine (default: DuckDuckGo)")
         group1.add_option("--se-ext", action="store", dest="engineloc", help="set location for search engine (ex: 'fr')")
         group1.add_option("--sa", action="store_true", dest="allengines", help="search massively using all search engines")
+        group1.add_option("--list-engines", action="store_true", dest="listengines", help="list all supported search engines")
         self.add_option_group(group1)
 
         group2 = optparse.OptionGroup(self, "*Public*", 
@@ -92,16 +94,29 @@ class OrbOptions(optparse.OptionParser):
         group9.add_option("--json", action="store", dest="json", help="generate json report (ex: --json='foo.json')")
         self.add_option_group(group9)
 
+    def banner(self):
+        print('='*75)
+        print("")
+        print("  _|_|              _|        ")
+        print("_|    _|  _|  _|_|  _|_|_|    ")
+        print("_|    _|  _|_|      _|    _|  ")
+        print("_|    _|  _|        _|    _|  ")
+        print("  _|_|    _|        _|_|_|    ")
+        print("")
+        print(" Orb: massive footprinting tool - 2016/2026 - by psy (https://03c8.net)")
+        print("")
+        print(' + Version : v0.4 (2026) - "Yellow Orb!"')
+        print(" + Website : https://orb.03c8.net")
+        print(" + Code    : https://github.com/epsylon/orb")
+        print(" + License : GNU General Public License v3 (GPLv3)")
+        print("")
+        print('='*75)
+
     def get_options(self, user_args=None):
         (options, args) = self.parse_args(user_args)
-        if (not options.checktor and not options.target and not options.gui and not options.update):
-            print("\n"+'='*75, "\n")
-            print("  _|_|              _|        ")
-            print("_|    _|  _|  _|_|  _|_|_|    ")
-            print("_|    _|  _|_|      _|    _|  ")
-            print("_|    _|  _|        _|    _|  ")
-            print("  _|_|    _|        _|_|_|    ")
-            print(self.description, "\n")
-            print('='*75, "\n")
+        if (not options.checktor and not options.target and not options.gui and not options.update and not options.listengines):
+            print("")
+            self.banner()
+            print("")
             return False
         return options

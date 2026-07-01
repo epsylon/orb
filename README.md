@@ -1,87 +1,111 @@
-=================================================================== 
+# Orb
 
-![orb](https://orb.03c8.net/orb/orb.png)
+**a libre, massive footprinting tool**
 
-----------
+![version](https://img.shields.io/badge/version-v0.4-ffb020)
+![release](https://img.shields.io/badge/release-Yellow_Orb!-ffb020)
+![python](https://img.shields.io/badge/python-3-ffb020)
+![license](https://img.shields.io/badge/license-GPLv3-ffb020)
+![browser js](https://img.shields.io/badge/browser_JS-none-ffb020)
 
-Orb: massive footprinting tool - 2016/2020 - by psy (https://03c8.net)
+[Website](https://orb.03c8.net) · [Source](https://code.03c8.net/epsylon/orb) · [GitHub](https://github.com/epsylon/orb) · [Contact](mailto:epsylon@riseup.net)
 
-========================
+![Orb Web GUI](https://orb.03c8.net/orb-gui.png)
 
-  Orb - is a massive footprinting tool.
+---
 
-  It will use passive/active -automated- methods to provides you real information about
-  a target. You only need to set a 'concept' to start to gather information. 
+## What is Orb?
 
-  Orb uses this methods:
+Orb is a massive footprinting tool. It uses passive and active —automated— methods to provide
+real information about a target. You only need to set a *concept* to start gathering data. When
+finished, Orb builds you some fancy reports.
 
-     + Passive:
-          - crawlering on search engines for public information (deep web included)
-          - searching for registered domains
-          - extracting whois info (owners, dates)
-          - discovering subdomains
-          - searching for machines running services
-          - searching for DNS records (A, NS, MX, TXT)
-          - extracting CVE and CVS records (vulnerabilities)
+**Passive**
 
-     + Active:
-          - scanning for open ports (tcp/udp)(1-65535)
-          - fingerprinting banners (states, vendors, OS, versions, CPE)
+- Crawl search engines for public records (deep web included)
+- Search for registered domains
+- Extract whois info (owners, dates)
+- Discover subdomains
+- Find machines running services
+- Resolve DNS records (A, NS, MX, TXT)
+- Extract CVE / CVS vulnerability records
 
-  After this tasks... Orb will provide you some fancy reports.
+**Active**
 
+- Scan for open ports (TCP/UDP, 1–65535)
+- Fingerprint banners (state, vendor, OS, version, CPE)
 
-### License
+## Features
 
-  Orb is free software, and may be redistributed under [GPL v3].
+- **Multiple search engines** — query one source or all of them at once
+- **Deep web** — onion (Tor) records through the Ahmia gateway
+- **Whois** — registrant, creation, expiration and last-update dates
+- **Subdomains** — passive discovery from search-engine results (no bruteforcing)
+- **DNS records** — resolve A, NS, MX and TXT, with custom resolvers
+- **Port scanning** — Nmap-powered TCP/UDP scanning with service detection
+- **Banner grabbing** — state, product, version, name, extra info and CPE
+- **CVE / CVS** — vulnerability lookups powered by the NVD API
+- **Reports** — raw text and, optionally, structured JSON per target
+- **Web GUI** — optional local interface
+- **Tor aware** — built-in Tor connection check
+- **Self-update** — pull the latest stable version from git
 
+## Install
 
-### Installing Orb:
+Orb runs on many platforms. It requires **Python 3** and a few libraries:
+`ddgs`, `whois`, `dnspython`, `python-nmap` and `requests`.
 
-  Orb runs on many platforms.  It requires Python (3.x.y) and the following libraries:
+```bash
+git clone https://github.com/epsylon/orb
+cd orb
 
-       python3-whois - Python module for retrieving WHOIS information - Python 3
-       whois (0.9.5) - Retrieve and parse whois data for IPv4 and IPv6 addresses.
-       python3-nmap - Python3 interface to the Nmap port scanner
-       nmap (0.0.1) - Map numbers from one range to another
-       python3-requests - elegant and simple HTTP library for Python3, built for human beings
-       requests (2.22.0) - Python HTTP for Humans.
-       wikipedia (1.4.0) - Wikipedia API for Python
+sudo apt-get install nmap python3-pip
+pip3 install -r orb/docs/requeriments.txt
 
-  On Debian-based systems (ex: Ubuntu), run: 
+# or install the libraries manually
+pip3 install ddgs whois dnspython python-nmap requests --user
+```
 
-       sudo apt-get install python3-whois python3-nmap python3-requests && sudo pip3 install whois nmap requests wikipedia
+The Nmap system binary is required for the active port-scanning features.
 
-  Or:
+Source libs:
 
-       sudo apt-get install python3-whois pythons3-nmap python3-requests && pip3 install whois==0.9.5 nmap==0.0.1 requests==2.22.0 wikipedia==1.4.0 --user
+- Python — https://www.python.org/downloads/
+- ddgs — https://pypi.org/project/ddgs/
+- whois — https://pypi.org/project/whois/
+- dnspython — https://pypi.org/project/dnspython/
+- python-nmap — https://pypi.org/project/python-nmap/
+- requests — https://pypi.org/project/requests/
 
-  Source libs:
+## Usage
 
-       * Python: https://www.python.org/downloads/
-       * Pypi-whois: https://pypi.python.org/pypi/whois
-       * Pydnspython: https://pypi.python.org/pypi/dnspython
-       * python-nmap: https://pypi.python.org/pypi/python-nmap
-       * python-requests: https://pypi.org/project/requests/
-       * python-wikipedia: https://pypi.org/project/wikipedia/
+```bash
+# full footprinting of a target
+python3 orb --spell='target'
 
-### Examples
+# massive run across several TLDs, using all engines
+python3 orb --spell='target' --ext='.com,.net,.org' --sa
 
-  You can use:
+# passive-only reconnaissance with a chosen engine
+python3 orb --spell='target' --passive --se='bing'
 
-    python3 orb --update
-    python3 orb --check-tor
-    python3 orb --gui (for Web interface)
+# active only, TCP scan on a custom port range
+python3 orb --spell='target' --active --scan-tcp --scan-ports='1-1024'
 
-  Or:
+# custom DNS resolvers and a JSON report
+python3 orb --spell='target' --resolver='1.1.1.1,8.8.8.8' --json='target.json'
 
-    python3 orb --spell='target'
+# pace requests to avoid rate limiting (seconds between requests)
+python3 orb --spell='target' --delay='2'
 
-  Ex (massive):
+# extra utilities
+python3 orb --gui            # local web interface
+python3 orb --list-engines   # list supported search engines
+python3 orb --check-tor      # verify Tor is used properly
+python3 orb --update         # update to the latest stable version
+```
 
-    python3 orb --spell='target' --ext='.com,.net,.org' --sa
-
-## Options and features:
+## Options
 
 ```
  ./orb --help
@@ -96,6 +120,7 @@ Options:
   --update              check for latest stable version
   --spell=TARGET        start complete footprinting on this target
   --gui                 run GUI (Orb Web Interface)
+  --delay=DELAY         set delay in seconds between requests (default: 1)
 
   *Methods*:
     These options can be used to set some footprinting interaction
@@ -108,9 +133,10 @@ Options:
     These options can be used to specify which search engines use to
     extract information:
 
-    --se=ENGINE         set search engine (default: Yahoo)
+    --se=ENGINE         set search engine (default: DuckDuckGo)
     --se-ext=ENGINELOC  set location for search engine (ex: 'fr')
     --sa                search massively using all search engines
+    --list-engines      list all supported search engines
 
   *Public*:
     Orb will search for interesting public records. You can choose
@@ -173,192 +199,139 @@ Options:
 
     --no-log            disable generate reports
     --json=JSON         generate json report (ex: --json='foo.json')
-
 ```
 
-#### Methods
+## Methods
 
-  - You can select a set of options organized by footprinting method. 
+You can select a set of options organized by footprinting method:
 
-    For this release:
+- **Passive** — public, deep web, social, news, whois and subdomain discovery (non-intrusive); no port/DNS scanning and no banner grabbing.
 
-     + Passive:
-       - Search for public records
-       - Search for deep web records
-       - Search for social records
-       - Search for news records
-       - Extract whois information
-       - Discover subdomains (using non intrusive methods)
-       - Not scan ports on machines
-       - Not scan DNS records
-       - Not scan NS records
-       - Not scan MX records
-       - Not banner grabbing
+  ```bash
+  python3 orb --spell='target' --passive
+  ```
 
-       *Ex: python3 orb --spell 'target' --passive
+- **Active** — the opposite of *passive*.
 
-     + Active:
-       - Opposite to 'Passive' method.
+  ```bash
+  python3 orb --spell='target' --active
+  ```
 
-       *Ex: python3 orb --spell='target' --active
+## Search engines
 
+Gather public records from multiple sources. Pick one with `--se`, or query them all at once
+with `--sa`:
 
-#### Search Engines
+`duck` · `bing` · `brave` · `mojeek` · `yahoo` · `startpage` · `ecosia`
 
-  - You can set different search engines to gather public records from the Internet.
+Deep web (onion) records are retrieved through **Ahmia** (ahmia.fi). List all supported engines
+with `python3 orb --list-engines`.
 
-    For this release (by default: DuckDuckGo):
-
-     + Supported:
-       - Duck (duckduckgo.com) [11/01/2020]
-       - Bing (bing.com) [11/01/2020]
-       - Torch! (deep web) [11/01/2020]
-
-       *Ex: python3 orb --spell='target' --se='bing'
-
-  - Also you can set the location for search engine to retrieve more accurate information
-    about your target.
-
-    For example, if is located in Spain you can try to use 'yahoo.es' servers:
-
-       *Ex: python3 orb --spell='target' --se='bing' --se-ext='es' (france=fr, italy=it, etc...)
-
-  - You can search massively using all search engines with:
-
-       *Ex: python3 orb --spell='target' --sa
-
-    These options can be combined:
-
-       *Ex: python3 orb --spell='target' --sa --se-ext='nl'
-
-
-#### Public Records
-
-  - Orb will search on the WWW for interesting public records. 
- 
-    But is important to set what is "interesting" for you. For that you can create a list of sources
-    organized by some non variable categories: social and news.
-
-    It is added to the tool an example folder for Spain to see how works:
-
-       *Ex: python3 orb --spell='target' --social-f='core/sources/spain/social.txt' --news-f='core/sources/spain/news.txt'
-
-    You should try to build your own sources. 
-
-    By default it is using most ranked Alexa.com services short by category. So you will have a nice global scope from
-    the beginning.
-
-
-#### Domains
-
-  - You can set which domain extensions do you want to use to perform footprinting tasks.
-
-    By default, Orb will use IANA supported domains. But you can set your own manually:
-
-       *Ex: python3 orb --spell='target' --ext='.com,.net,.org'
-
-    Or directly set a list from a file (examples provided):
-     
-       *Ex: python3 orb --spell='target' --ext-f='core/sources/user-exts.txt'
-
-
-####  Whois
-
-  - Orb will search on 'Whois' records for registrant information.
-
-```
-       *Output example*:
-       -----------------
-       -Domain: microsoft.com
-       -Registrant: MARKMONITOR INC.
-       -Creation date: 1991-05-02 00:00:00
-       -Expiration: 2021-05-03 00:00:00
-       -Last update: 2014-10-09 00:00:00
-       -----------------
+```bash
+python3 orb --spell='target' --se='bing'
+python3 orb --spell='target' --sa
 ```
 
-####  Subdomains
+You can also target a location with `--se-ext` (france=fr, italy=it, ...):
 
-  - Orb will try to discover info about subdomains.
-
-    For this release it is using a passive method with search engines (not bruteforcing).
-
-
-####  DNS
-
-  - Orb will try to discover info about DNS records and machines running them.
-
-    You can set which DNS resolvers (Google used by default) do you want to use for that tasks:
-      
-       *Ex: python3 orb --spell='target' --resolver='8.8.8.8,8.8.8.4'
-
-
-####  Port Scanning
-
-  - Orb will use Nmap -python lib wrapper- to perform port scanning tasks.
-
-    You can set protocol type to only TCP (UDP+TCP by default) with:
-
-       *Ex: python3 orb --spell='target' --scan-tcp
-
-    Or select which ports do you want to try with:
-
-       *Ex: python3 orb --spell='target' --scan-ports='21-443'
-
-    ** Port scanner will show you only 'Open' ports on machines. 
-
-    You can see also 'Filtered' ports with:
-
-       *Ex: python3 orb --spell='target' --scan-ports='21-443' --show-filtered
-
-
-####  Banner Grabbing
-
-  - Orb will try to extract interesting information about services running
-    on machines discovered (ex: OS, vendor, version, cpe, cve, cvs):
-
-```
-       *Output example*:
-       -----------------
-       - IP: XXX.XXX.XXX.XXX
-         * State : up
-          - Protocol : tcp
-            + Port: 80 ( open ) - IBM WebSEAL reverse http proxy  |  http-proxy  
-              + CVE-2014-0963 -> https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2014-0963
-                -----
-                Last updated: 3/27/2016 2:37:25 PM
-                CVE Publication rate: 11.13
-                The Reverse Proxy feature in IBM Global Security Kit (aka GSKit) in IBM Security Access Manager (ISAM) for Web 7.0 before 7.0.0-ISS-SAM-IF0006 and 8.0 before 8.0.0.3-ISS-WGA-IF0002 allows remote attackers to cause a denial of service (infinite loop) via crafted SSL messages.
-       -----------------
+```bash
+python3 orb --spell='target' --se-ext='es'
 ```
 
-####  Reporting
+## Public records
 
-  - Orb will log all tasks and results organizing them by target on a folder: 'reports/'. 
+Orb searches the WWW for interesting public records. You decide what is "interesting" by building
+lists of sources organized in two categories: social and news. An example folder for Spain is
+included:
 
-    You can launch the tool without any log adding:
+```bash
+python3 orb --spell='target' --social-f='core/sources/spain/social.txt' --news-f='core/sources/spain/news.txt'
+```
 
-        *Ex: python3 orb --spell='target' --no-log
+By default it uses a set of most ranked global services sorted by category, so you get a nice
+global scope from the beginning.
 
-  - For verbose output you can use:
+## Domains
 
-        *Ex: python3 orb --spell='target' -v
+By default Orb uses IANA-supported TLDs, but you can set your own:
 
-  - Also you can generate a JSON report only with valid data gathered with:
+```bash
+python3 orb --spell='target' --ext='.com,.net,.org'
+python3 orb --spell='target' --ext-f='core/sources/user-exts.txt'
+```
 
-        *Ex: python3 orb --spell='target' --json='target.json'
+## Whois
 
+Orb searches 'Whois' records for registrant information.
 
-### Contribute: 
+```
+- Domain: microsoft.com
+- Registrant: MarkMonitor Inc.
+- Creation date: 1991-05-02 00:00:00
+- Expiration: 2025-05-03 00:00:00
+- Last update: 2024-10-09 00:00:00
+```
 
-  To make donations use the following hash:
-  
-      - Bitcoin: 19aXfJtoYJUoXEZtjNwsah2JKN9CK5Pcjw
+## Subdomains
 
+Orb discovers subdomains using a passive method with search engines (no bruteforcing).
 
-### Contact
+## DNS
 
-  Please report any problems you encounter using/installing Orb to:
+Orb resolves DNS records (A, NS, MX, TXT) and the machines running them. You can set custom
+resolvers (Google is used by default):
 
-      - psy (epsylon@riseup.net)
+```bash
+python3 orb --spell='target' --resolver='8.8.8.8,8.8.4.4'
+```
 
+## Port scanning
+
+Orb uses the Nmap Python wrapper to perform port-scanning tasks. Set TCP only (TCP+UDP by default),
+choose a port range, and optionally show 'filtered' ports:
+
+```bash
+python3 orb --spell='target' --scan-tcp
+python3 orb --spell='target' --scan-ports='21-443'
+python3 orb --spell='target' --scan-ports='21-443' --show-filtered
+```
+
+Only 'Open' ports are shown by default.
+
+## Banner grabbing
+
+Orb extracts information about services running on discovered machines (OS, vendor, version, CPE)
+and correlates them with known vulnerabilities from the NVD:
+
+```
+- IP: XXX.XXX.XXX.XXX
+  * State : up
+   - Protocol : tcp
+     + Port: 80 ( open ) - IBM WebSEAL reverse http proxy  |  http-proxy
+       + CVE-2014-0963 -> https://nvd.nist.gov/vuln/detail/CVE-2014-0963
+         The Reverse Proxy feature in IBM Global Security Kit (aka GSKit) in IBM Security Access
+         Manager (ISAM) for Web 7.0 and 8.0 allows remote attackers to cause a denial of service.
+```
+
+## Reporting
+
+Orb logs all tasks and results per target under a `reports/` folder.
+
+```bash
+python3 orb --spell='target' --no-log          # no reports
+python3 orb --spell='target' -v                # verbose output
+python3 orb --spell='target' --json='target.json'   # JSON report
+```
+
+## Contribute
+
+Orb is free software. If it is useful to you, consider supporting its development:
+
+- **Bitcoin [BTC]:** `19aXfJtoYJUoXEZtjNwsah2JKN9CK5Pcjw`
+- **ECOin [ECO]:** `EZnYs33TG87ZzBWgADrj8653s3bPUqreW9`
+
+Found a bug, have a patch or an idea? Reach out to psy (epsylon@riseup.net).
+
+---
+
+**Orb** — massive footprinting tool · 2016 / 2026 · by [psy](https://03c8.net) · Released under the [GNU GPLv3](https://www.gnu.org/licenses/gpl-3.0.html)

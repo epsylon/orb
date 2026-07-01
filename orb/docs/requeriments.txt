@@ -1,5 +1,5 @@
-whois==0.9.5
-dnspython==1.15.0
-nmap==0.0.1
-requests==2.22.0
-wikipedia==1.4.0
+ddgs>=9.0.0
+whois>=1.20240129.2
+dnspython>=2.6.1
+python-nmap>=0.7.1
+requests>=2.31.0

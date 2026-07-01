@@ -44,30 +44,28 @@ Orb: footprinting tool - by psy
 
   Orb runs on many platforms. It requires Python (3.x.y) and the following libraries:
 
-       python3-whois - Python module for retrieving WHOIS information - Python 3
-       whois (0.9.5) - Retrieve and parse whois data for IPv4 and IPv6 addresses.
-       python3-nmap - Python3 interface to the Nmap port scanner
-       nmap (0.0.1) - Map numbers from one range to another
-       python3-requests - elegant and simple HTTP library for Python3, built for human beings
-       requests (2.22.0) - Python HTTP for Humans.
-       wikipedia (1.4.0) - Wikipedia API for Python
+       ddgs - Metasearch library to scrape results from search engines (used for DuckDuckGo).
+       whois - Retrieve and parse whois data for IPv4 and IPv6 addresses.
+       dnspython - DNS toolkit for Python (A, NS, MX, TXT records).
+       python-nmap - Python3 interface to the Nmap port scanner.
+       requests - elegant and simple HTTP library for Python3, built for human beings.
 
-  On Debian-based systems (ex: Ubuntu), run: 
+  On Debian-based systems (ex: Ubuntu), run:
 
-       sudo apt-get install python3-whois python3-nmap python3-requests && sudo pip3 install whois nmap requests wikipedia
+       sudo apt-get install nmap python3-pip && pip3 install -r orb/docs/requeriments.txt
 
-  Or:
+  Or (manually):
 
-       sudo apt-get install python3-whois pythons3-nmap python3-requests && pip3 install whois==0.9.5 nmap==0.0.1 requests==2.22.0 wikipedia==1.4.0 --user
+       sudo apt-get install nmap && pip3 install ddgs whois dnspython python-nmap requests --user
 
   Source libs:
 
        * Python: https://www.python.org/downloads/
-       * Pypi-whois: https://pypi.python.org/pypi/whois
-       * Pydnspython: https://pypi.python.org/pypi/dnspython
-       * python-nmap: https://pypi.python.org/pypi/python-nmap
+       * ddgs: https://pypi.org/project/ddgs/
+       * Pypi-whois: https://pypi.org/project/whois/
+       * Pydnspython: https://pypi.org/project/dnspython/
+       * python-nmap: https://pypi.org/project/python-nmap/
        * python-requests: https://pypi.org/project/requests/
-       * python-wikipedia: https://pypi.org/project/wikipedia/
 
 ====================
   Examples:
@@ -123,19 +121,29 @@ Orb: footprinting tool - by psy
 
     For this release (by default: DuckDuckGo):
 
-     + Supported:+
-       - Duck (duckduckgo.com) [11/01/2020]
-       - Bing (bing.com) [11/01/2020]
-       - Torch! (deep web) [11/01/2020]
+     + Supported:
+       - Duck (duckduckgo.com) [01/07/2026]
+       - Bing (bing.com) [01/07/2026]
+       - Brave (search.brave.com) [01/07/2026]
+       - Mojeek (mojeek.com) [01/07/2026]
+       - Yahoo (search.yahoo.com) [01/07/2026]
+       - Startpage (startpage.com) [01/07/2026]
+       - Ecosia (ecosia.org) [01/07/2026]
+
+    Deep web (onion) records are retrieved through Ahmia (ahmia.fi) [01/07/2026].
+
+    You can list all supported engines with:
+
+       *Ex: python3 orb --list-engines
 
        *Ex: python3 orb --spell='target' --se='bing'
 
   - Also you can set the location for search engine to retrieve more accurate information
     about your target.
 
-    For example, if is located in Spain you can try to use 'bing.es' servers:
+    For example, if your target is located in Spain you can try:
 
-       *Ex: python3 orb --spell='target' --se='bing' --se-ext='es' (france=fr, italy=it, etc...)
+       *Ex: python3 orb --spell='target' --se-ext='es' (france=fr, italy=it, etc...)
 
   - You can search massively using all search engines with:
 
@@ -160,7 +168,7 @@ Orb: footprinting tool - by psy
 
     You should try to build your own sources. 
 
-    By default it is using most ranked Alexa.com services short by category. So you will have a nice global scope from
+    By default it is using a set of most ranked global services sorted by category. So you will have a nice global scope from
     the beginning.
 
 ====================
@@ -242,11 +250,8 @@ Orb: footprinting tool - by psy
        - IP: XXX.XXX.XXX.XXX
          * State : up
           - Protocol : tcp
-            + Port: 80 ( open ) - IBM WebSEAL reverse http proxy  |  http-proxy  
-              + CVE-2014-0963 -> https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2014-0963
-                -----
-                Last updated: 3/27/2016 2:37:25 PM
-                CVE Publication rate: 11.13
+            + Port: 80 ( open ) - IBM WebSEAL reverse http proxy  |  http-proxy
+              + CVE-2014-0963 -> https://nvd.nist.gov/vuln/detail/CVE-2014-0963
                 The Reverse Proxy feature in IBM Global Security Kit (aka GSKit) in IBM Security Access Manager (ISAM) for Web 7.0 before 7.0.0-ISS-SAM-IF0006 and 8.0 before 8.0.0.3-ISS-WGA-IF0002 allows remote attackers to cause a denial of service (infinite loop) via crafted SSL messages.
        -----------------
 

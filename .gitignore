@@ -1,0 +1,16 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Orb runtime output
+reports/
+*.raw
+
+# Editor / OS
+*.swp
+*~
+.DS_Store
